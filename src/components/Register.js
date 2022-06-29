@@ -1,38 +1,80 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [company, setCompany] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [error, setError] = useState("");
+  const [messages, setMessages] = useState([]);
 
   const submitDataToServer = async () => {
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000/api/user/register",
-        {
+    const totalErrors = [];
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      totalErrors.push({ msg: "Invalid Email" });
+    }
+
+    if (firstName.length < 2) {
+      totalErrors.push({ msg: "Please enter a valid first name" });
+    }
+
+    if (company.length < 2) {
+      totalErrors.push({ msg: "Please enter a valid company name" });
+    }
+
+    if (password.length < 6) {
+      totalErrors.push({
+        msg: "Password length must be at least six characters",
+      });
+    }
+
+    if (password !== password2) {
+      totalErrors.push({ msg: "Passwords do not match" });
+    }
+
+    if (totalErrors.length > 0) {
+      setMessages(totalErrors);
+      setTimeout(() => {
+        setMessages([]);
+      }, 3000);
+    } else {
+      await axios
+        .post("http://127.0.0.1:5000/api/user/register", {
           email,
           firstName,
-          lastName: "Test",
+          lastName: "Test", // REMOVE IN PROD
           company,
           password,
-        }
-      );
-    } catch (error) {
-      setError(error.message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+        })
+        .then((response) => {
+          setMessages([...messages, { msg: "Success! Redirecting..." }]);
+          let info = {
+            user: response.data.user,
+            token: response.data.token,
+          };
+          info = JSON.stringify(info);
+          localStorage.setItem("info", info);
+          setTimeout(() => {
+            navigate("/form");
+          }, 1500);
+        })
+        .catch((err) => {
+          setMessages(...messages, err.response.data);
+          setTimeout(() => {
+            setMessages([]);
+          }, 1500);
+        });
     }
   };
 
   return (
     <div className="App">
       <h2>Register</h2>
-      <label for="email">Email:</label>
+      <label htmlFor="email">Email:</label>
       <input
         onChange={(e) => {
           setEmail(e.target.value);
@@ -43,7 +85,7 @@ const Register = () => {
         placeholder="Email"
       ></input>
 
-      <label for="firstName">First Name:</label>
+      <label htmlFor="firstName">First Name:</label>
       <input
         onChange={(e) => {
           setFirstName(e.target.value);
@@ -54,7 +96,7 @@ const Register = () => {
         placeholder="First Name"
       ></input>
 
-      <label for="company">Company:</label>
+      <label htmlFor="company">Company:</label>
       <input
         onChange={(e) => {
           setCompany(e.target.value);
@@ -65,7 +107,7 @@ const Register = () => {
         placeholder="Company "
       ></input>
 
-      <label for="password">Password:</label>
+      <label htmlFor="password">Password:</label>
       <input
         onChange={(e) => {
           setPassword(e.target.value);
@@ -76,7 +118,7 @@ const Register = () => {
         placeholder="Password"
       ></input>
 
-      <label for="password2">Confirm Password:</label>
+      <label htmlFor="password2">Confirm Password:</label>
       <input
         onChange={(e) => {
           setPassword2(e.target.value);
@@ -97,7 +139,9 @@ const Register = () => {
       </button>
 
       <div>
-        <p>{error}</p>
+        {messages.map((message) => {
+          return <p key={message.msg}>{message.msg}</p>;
+        })}
       </div>
     </div>
   );
