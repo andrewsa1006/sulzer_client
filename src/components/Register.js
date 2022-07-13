@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import "./register.css";
+import { Stack, TextField, Button } from "@mui/material";
+import logo from "../assets/logo.png";
+import { createTheme } from "@mui/material/styles";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -71,77 +75,114 @@ const Register = () => {
     }
   };
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#004e83",
+      },
+    },
+  });
+
   return (
-    <div className="App">
-      <h2>Register</h2>
-      <label htmlFor="email">Email:</label>
-      <input
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        type="text"
-        id="email"
-        name="email"
-        placeholder="Email"
-      ></input>
+    <div className="container">
+      <div className="card">
+        <div className="logoBox">
+          <img className="image" src={logo} alt={"logo"} />
+        </div>
 
-      <label htmlFor="firstName">First Name:</label>
-      <input
-        onChange={(e) => {
-          setFirstName(e.target.value);
-        }}
-        type="text"
-        id="firstName"
-        name="firstName"
-        placeholder="First Name"
-      ></input>
+        <Stack spacing={2}>
+          <div className="loginTextInputs">
+            <TextField
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              type="text"
+              id="email"
+              name="email"
+              htmlFor="email"
+              variant="standard"
+              label="Email"
+            />
+          </div>
 
-      <label htmlFor="company">Company:</label>
-      <input
-        onChange={(e) => {
-          setCompany(e.target.value);
-        }}
-        type="text"
-        id="company"
-        name="company"
-        placeholder="Company "
-      ></input>
+          <div className="loginTextInputs">
+            <TextField
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+              type="text"
+              id="firstName"
+              name="firstName"
+              variant="standard"
+              label="First Name"
+              htmlFor="firstName"
+            />
+          </div>
 
-      <label htmlFor="password">Password:</label>
-      <input
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Password"
-      ></input>
+          <div className="loginTextInputs">
+            <TextField
+              onChange={(e) => {
+                setCompany(e.target.value);
+              }}
+              type="text"
+              id="company"
+              name="company"
+              htmlFor="company"
+              label="Company"
+              variant="standard"
+            />
+          </div>
 
-      <label htmlFor="password2">Confirm Password:</label>
-      <input
-        onChange={(e) => {
-          setPassword2(e.target.value);
-        }}
-        type="password"
-        id="password2"
-        name="password2"
-        placeholder="Confirm Password"
-      ></input>
+          <div className="loginTextInputs">
+            <TextField
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              type="password"
+              id="password"
+              name="password"
+              htmlFor="fpassword"
+              label="Password"
+              variant="standard"
+            />
+          </div>
 
-      <button
-        onClick={() => {
-          submitDataToServer();
-        }}
-        type="submit"
-      >
-        Submit
-      </button>
+          <div className="loginTextInputs">
+            <TextField
+              onChange={(e) => {
+                setPassword2(e.target.value);
+              }}
+              type="password"
+              id="password2"
+              name="password2"
+              htmlFor="password2"
+              label="Confirm Password"
+              variant="standard"
+            />
+          </div>
+          <div>
+            <Button
+              onClick={() => {
+                submitDataToServer();
+              }}
+              color="primary"
+              type="submit"
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </div>
+        </Stack>
 
-      <div>
-        {messages.map((message) => {
-          return <p key={message.msg}>{message.msg}</p>;
-        })}
+        <span>
+          {messages.map((message) => {
+            return (
+              <p class="notification" key={message.msg}>
+                {message.msg}
+              </p>
+            );
+          })}
+        </span>
       </div>
     </div>
   );

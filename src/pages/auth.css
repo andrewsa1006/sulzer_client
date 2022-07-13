@@ -1,0 +1,8 @@
+.bg-image {
+  background-image: url("../assets/bgimage.jpg");
+  height: 100vh;
+  background-size: cover;
+}
+
+.button {
+}

@@ -1,6 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import "./register.css";
+import { Stack, TextField, Button } from "@mui/material";
+import logo from "../assets/logo.png";
+import { style } from "@mui/system";
+import { createTheme } from "@mui/material/styles";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,44 +50,69 @@ const Login = () => {
       }, 3000);
     }
   };
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#004e83",
+      },
+    },
+  });
 
   return (
-    <div className="App">
-      <h2>Login</h2>
-      <label htmlFor="email">Email:</label>
-      <input
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        type="text"
-        id="email"
-        name="email"
-        placeholder="Email"
-      ></input>
+    <div className="container">
+      <div className="card">
+        <div className="logoBox">
+          <img className="image" src={logo} alt={"logo"} />
+        </div>
+        <Stack spacing={2}>
+          <div className="loginTextInputs">
+            <TextField
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              type="text"
+              id="email"
+              name="email"
+              htmlFor="email"
+              variant="standard"
+              label="Email"
+            />
+          </div>
 
-      <label htmlFor="password">Password:</label>
-      <input
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Password"
-      ></input>
-
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          login();
-        }}
-      >
-        Login
-      </button>
-
+          <div className="loginTextInputs">
+            <TextField
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+              htmlFor="password"
+              variant="standard"
+              label="Password"
+            />
+          </div>
+          <div>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                e.preventDefault();
+                login();
+              }}
+            >
+              Login
+            </Button>
+          </div>
+        </Stack>
+      </div>
       <div>
         {messages.map((message) => {
-          return <p key={message.msg}>{message.msg}</p>;
+          return (
+            <p className="notification" key={message.msg}>
+              {message.msg}
+            </p>
+          );
         })}
       </div>
     </div>

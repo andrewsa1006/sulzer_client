@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react";
+import * as React from "react";
+import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Header from "../components/Header";
+import "./form.css";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { Button, Stack } from "@mui/material";
+import Box from "@mui/material/Box";
+import formbg from "../assets/formbg.jpg";
+import { blue } from "@mui/material/colors";
 
 const Form = () => {
   const [user, setUser] = useState(null);
@@ -10,7 +22,7 @@ const Form = () => {
   const [value3, setValue3] = useState("");
   const [dropdown1, setDropdown1] = useState("");
   const [dropdown2, setDropdown2] = useState("");
-  const [messages, setMessages] = useState([{ msg: "Here is a test" }]);
+  const [messages, setMessages] = useState([{}]);
 
   const handleSubmit = async () => {
     if (
@@ -72,89 +84,156 @@ const Form = () => {
       setUser(info);
     }
   }, []); // eslint-disable-line
+
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  const [values, setValue] = React.useState("");
+
+  const handleChanges = (event) => {
+    setValue(event.target.value);
+  };
   return (
-    <div className="Form">
-      <h1>This is the form page</h1>
+    <Box
+      class="formbg"
+      style={{
+        backgroundImage: `url(${formbg})`,
+        backgroundSize: "cover",
+        height: "100vh",
+      }}
+    >
+      <Header />
+      <div>
+        <div className="formSectionOne">
+          <Stack spacing={3}>
+            <div className="stars">
+              <TextField
+                onChange={(e) => {
+                  setValue1(e.target.value);
+                }}
+                type="text"
+                id="value1"
+                name="value1"
+                placeholder="Stars #"
+                htmlFor="starsNumber"
+                variant="standard"
+              />
+            </div>
+            <div>
+              <TextField
+                onChange={(e) => {
+                  setValue2(e.target.value);
+                }}
+                type="text"
+                id="value2"
+                name="value2"
+                placeholder="Project Name"
+                htmlFor="projectName"
+                variant="standard"
+              />
+            </div>
+          </Stack>
+          <br></br>
+          <br></br>
 
-      <label htmlFor="value1">value1:</label>
-      <input
-        onChange={(e) => {
-          setValue1(e.target.value);
-        }}
-        type="text"
-        id="value1"
-        name="value1"
-        placeholder="value1"
-      ></input>
+          {/* here is where to start the dropdown divs for two columns CREATE NEW DIV HERE */}
+          <div className="row">
+            <div class="column">
+              <div className="selections">
+                <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
+                  <InputLabel id="typeOfBid">Type</InputLabel>
+                  <Select
+                    labelId="typeOfBid"
+                    id="typeOfBid"
+                    value={age}
+                    onChange={handleChange}
+                    label="Age"
+                  >
+                    <MenuItem value={1}>Budget</MenuItem>
+                    <MenuItem value={2}>Firm Bid</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
 
-      <label htmlFor="value2">value2:</label>
-      <input
-        onChange={(e) => {
-          setValue2(e.target.value);
-        }}
-        type="text"
-        id="value2"
-        name="value2"
-        placeholder="value2"
-      ></input>
+              <div className="selections">
+                <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
+                  <InputLabel id="quotationSelection">
+                    Quotation Selection
+                  </InputLabel>
+                  <Select
+                    labelId="quotationSelection"
+                    id="quotationSelection"
+                    value={values}
+                    onChange={handleChanges}
+                    label="quotationSelection"
+                  >
+                    <MenuItem value={1}>Pump Selections Only</MenuItem>
+                    <MenuItem value={2}>Pump Quotation</MenuItem>
+                    <MenuItem value={3}>
+                      {" "}
+                      Pump Quotation Including Motors
+                    </MenuItem>
+                    <MenuItem value={4}>Motor Quotation Only</MenuItem>
+                    <MenuItem value={5}>Motor Quotation Only</MenuItem>
+                    <MenuItem value={6}>
+                      Review STARS file and advise price on RFQ's
+                    </MenuItem>
+                    <MenuItem value={7}>
+                      Other(Be descriptive in the comments below)
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
 
-      <label htmlFor="value3">value3:</label>
-      <input
-        onChange={(e) => {
-          setValue3(e.target.value);
-        }}
-        type="text"
-        id="value3"
-        name="value3"
-        placeholder="value3"
-      ></input>
+              <div className="textbox">
+                <TextField
+                  style={{ marginTop: 20, width: 600 }}
+                  id="standard-multiline-static"
+                  label="Other Comments"
+                  multiline
+                  rows={8}
+                  variant="standard"
+                />
+              </div>
+              <div>
+                <Stack spacing={3}>
+                  <div class="buttoncolumn">
+                    <Button variant="contained" component="label">
+                      Upload File(s)
+                      <input
+                        type="file"
+                        hidden
+                        onChange={(e) => {
+                          setFiles(e.target.files);
+                        }}
+                        id="file"
+                        name="file"
+                        accept="application/pdf"
+                        multiple
+                      />
+                    </Button>
+                  </div>
 
-      <label htmlFor="dropdown1">dropdown1:</label>
-      <select
-        onChange={(e) => {
-          setDropdown1(e.target.value);
-        }}
-        name="dropdown1"
-        id="dropdown1"
-      >
-        <option>Select...</option>
-        <option>The quick brown fox</option>
-        <option>Jumped over the lazy cat</option>
-        <option>This is some more text</option>
-        <option>Just to fill the empty space</option>
-      </select>
+                  <div class="buttoncolumn">
+                    <Button
+                      id="submission"
+                      variant="contained"
+                      onClick={handleSubmit}
+                      type="submit"
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </Stack>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <label htmlFor="dropdown2">dropdown1:</label>
-      <select
-        onChange={(e) => {
-          setDropdown2(e.target.value);
-        }}
-        name="dropdown2"
-        id="dropdown2"
-      >
-        <option>Select...</option>
-        <option>Jumped over the lazy cat</option>
-        <option>This is some more text</option>
-        <option>Just to fill the empty space</option>
-      </select>
-
-      <br />
-
-      <label htmlFor="file">Upload PDF:</label>
-      <input
-        onChange={(e) => {
-          setFiles(e.target.files);
-        }}
-        type="file"
-        id="file"
-        name="file"
-        accept="application/pdf"
-        multiple
-      />
-      <br />
-      <button onClick={handleSubmit} type="submit">
-        Submit
-      </button>
       <br />
       <br />
       <div>
@@ -162,7 +241,7 @@ const Form = () => {
           return <p key={message.msg}>{message.msg}</p>;
         })}
       </div>
-    </div>
+    </Box>
   );
 };
 

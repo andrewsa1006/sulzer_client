@@ -1,0 +1,20 @@
+.greeting {
+  color: #ffffff;
+  opacity: 100%;
+}
+
+.headerbg {
+  background-color: #30abbd;
+  height: 100px;
+  box-shadow: 10px 10px 10px #141414;
+  margin-bottom: 30px;
+  opacity: 80%;
+  position: relative;
+}
+
+.logo {
+  position: absolute;
+  left: 10px;
+  height: 80px;
+  top: 10px;
+}
